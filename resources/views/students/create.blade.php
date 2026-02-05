@@ -3,6 +3,16 @@
 <div class="container mx-12 p-4">
     <h1>Create Student</h1>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('student.store') }}" method="POST">
         @csrf
         <div class="mb-4">
