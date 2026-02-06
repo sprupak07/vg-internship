@@ -5,11 +5,9 @@ use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\PageController;
 
-Route::get('/', function () {
-    // havey task
-    return view('welcome');
-});
+Route::get('/', [PageController::class, 'home'])->name('home');
 
 
 
