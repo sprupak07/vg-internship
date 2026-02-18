@@ -8,9 +8,10 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PageController;
 use Laravel\Socialite\Socialite;
-
-
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 
@@ -49,14 +50,23 @@ Route::resource('authors', AuthorController::class);
 Route::resource('books', BookController::class);
 
 
-Route::get('/auth/redirect', function () {
+Route::get('/auth/google/redirect', function () {
     return Socialite::driver('google')->redirect();
-});
+})->name('google.login');
 
-Route::get('/auth/callback', function () {
-    $user = Socialite::driver('google')->user();
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
 
-    // $user->token
+    $user = User::updateOrCreate([
+        'email' => $googleUser->email,
+    ], [
+        'name' => $googleUser->name,
+        'password' => Hash::make(Str::random(12)),
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
 });
 
 
