@@ -7,6 +7,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PageController;
+use Laravel\Socialite\Socialite;
+
 
 
 
@@ -45,6 +47,17 @@ Route::prefix("/students")->group(function () {
 Route::resource('categories', CategoryController::class);
 Route::resource('authors', AuthorController::class);
 Route::resource('books', BookController::class);
+
+
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/auth/callback', function () {
+    $user = Socialite::driver('google')->user();
+
+    // $user->token
+});
 
 
 Route::middleware('auth')->group(function () {
