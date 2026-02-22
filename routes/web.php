@@ -7,11 +7,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PageController;
-use Laravel\Socialite\Socialite;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Http\Controllers\SocialiteController;
+
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 
@@ -50,24 +47,10 @@ Route::resource('authors', AuthorController::class);
 Route::resource('books', BookController::class);
 
 
-Route::get('/auth/google/redirect', function () {
-    return Socialite::driver('google')->redirect();
-})->name('google.login');
-
-Route::get('/auth/google/callback', function () {
-    $googleUser = Socialite::driver('google')->user();
-
-    $user = User::updateOrCreate([
-        'email' => $googleUser->email,
-    ], [
-        'name' => $googleUser->name,
-        'password' => Hash::make(Str::random(12)),
-    ]);
-
-    Auth::login($user);
-
-    return redirect('/dashboard');
-});
+Route::get('/auth/google/redirect', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('google.callback');
+Route::get('/auth/github/redirect', [SocialiteController::class, 'redirectToGitHub'])->name('github.login');
+Route::get('/auth/github/callback', [SocialiteController::class, 'handleGitHubCallback'])->name('github.callback');
 
 
 Route::middleware('auth')->group(function () {
