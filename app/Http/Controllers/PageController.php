@@ -14,7 +14,7 @@ class PageController extends Controller
 
         // if Auth user then redirect to dashboard
         if ($request->user()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         } else {
             return redirect()->route('login');
         }
@@ -28,6 +28,11 @@ class PageController extends Controller
         $categories = Category::count();
 
         return view('dashboard', compact('books', 'authors', 'categories'));
+    }
+
+    public function dashboardNew()
+    {
+        return view('admin.dashboard');
     }
 
     public function mood()
