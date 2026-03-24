@@ -9,14 +9,14 @@ class BookController extends Controller
     public function index()
     {
         $books = \App\Models\Book::with(['author', 'category'])->paginate(10);
-        return view('books.index', compact('books'));
+        return view('admin.books.index', compact('books'));
     }
 
     public function create()
     {
         $authors = \App\Models\Author::all();
         $categories = \App\Models\Category::all();
-        return view('books.create', compact('authors', 'categories'));
+        return view('admin.books.create', compact('authors', 'categories'));
     }
 
     public function store(Request $request)
@@ -28,7 +28,15 @@ class BookController extends Controller
             'category_id' => 'required|exists:categories,id',
             'published_date' => 'nullable|date',
             'cover_image' => 'nullable|string', // Assuming simplified string input for now, or URL
+            'up_cover' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // For file upload, if needed
         ]);
+
+        if($request->hasFile('up_cover')) {
+            $file = $request->file('up_cover');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('public/covers', $filename);
+            $request->merge(['cover_image' => 'storage/covers/' . $filename]);
+        }
 
         \App\Models\Book::create($request->all());
 
@@ -37,14 +45,14 @@ class BookController extends Controller
 
     public function show(\App\Models\Book $book)
     {
-        return view('books.show', compact('book'));
+        return view('admin.books.show', compact('book'));
     }
 
     public function edit(\App\Models\Book $book)
     {
         $authors = \App\Models\Author::all();
         $categories = \App\Models\Category::all();
-        return view('books.edit', compact('book', 'authors', 'categories'));
+        return view('admin.books.edit', compact('book', 'authors', 'categories'));
     }
 
     public function update(Request $request, \App\Models\Book $book)

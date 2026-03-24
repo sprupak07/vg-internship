@@ -65,6 +65,8 @@ return [
     |
     */
 
+    // For nepal +5:45 (Asia/Kathmandu)
+
     'timezone' => 'UTC',
 
     /*

@@ -9,12 +9,12 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = \App\Models\Author::paginate(10);
-        return view('authors.index', compact('authors'));
+        return view('admin.authors.index', compact('authors'));
     }
 
     public function create()
     {
-        return view('authors.create');
+        return view('admin.authors.create');
     }
 
     public function store(Request $request)
@@ -31,12 +31,12 @@ class AuthorController extends Controller
 
     public function show(\App\Models\Author $author)
     {
-        return view('authors.show', compact('author'));
+        return view('admin.authors.show', compact('author'));
     }
 
     public function edit(\App\Models\Author $author)
     {
-        return view('authors.edit', compact('author'));
+        return view('admin.authors.edit', compact('author'));
     }
 
     public function update(Request $request, \App\Models\Author $author)

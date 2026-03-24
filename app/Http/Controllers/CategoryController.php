@@ -9,12 +9,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = \App\Models\Category::paginate(10);
-        return view('categories.index', compact('categories'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('categories.create');
+        return view('admin.categories.create');
     }
 
     public function store(Request $request)
@@ -30,12 +30,12 @@ class CategoryController extends Controller
 
     public function show(\App\Models\Category $category)
     {
-        return view('categories.show', compact('category'));
+        return view('admin.categories.show', compact('category'));
     }
 
     public function edit(\App\Models\Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return view('admin.categories.edit', compact('category'));
     }
 
     public function update(Request $request, \App\Models\Category $category)

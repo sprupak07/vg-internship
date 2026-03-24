@@ -32,6 +32,7 @@ class ProfileController extends Controller
             $data["profile"] = $path;
         }
 
+
         $request->user()->update($data);
 
         return redirect()->back()->with("success", "Profile updated successfully.");

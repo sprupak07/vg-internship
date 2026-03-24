@@ -13,16 +13,29 @@ class PageController extends Controller
     {
 
         // if Auth user then redirect to dashboard
-        if ($request->user()) {
-            return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->route('login');
-        }
+        // if ($request->user()) {
+        //     return redirect()->route('admin.dashboard');
+        // } else {
+        //     return redirect()->route('login');
+        // }
+
+
+        //  $incomes = Income::where('user_id', $request->user()->id);
+
+
+        $books = Book::all();
+
+        return view("frontend.home", compact('books'));
 
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        // validation of user role [admin or user]
+        if ($request->user()->role === 'user') {
+            return redirect()->route('home')->with('error', 'You are not authorized to access this page.');
+        }
+
         $books = Book::count();
         $authors = Author::count();
         $categories = Category::count();
@@ -39,6 +52,12 @@ class PageController extends Controller
     {
         $moods = ['Happy', 'Sad', 'Excited', 'Angry', 'Relaxed'];
 
-        return view('mood.index', compact('moods'));
+        return view('frontend.mood.index', compact('moods'));
+    }
+
+    public function book(Request $request, $id){
+
+        $book= Book::find($id);
+        return view('frontend.book', compact('book'));
     }
 }
